@@ -66,6 +66,7 @@ public class MineSpawner
 
             tile[targetPosX, targetPosY].PlaceMine();
             
+            // 그리드를 벗어나지 않는 선에서 인접하고 있는 타일들의 '근처 지뢰 수'를 증가시킵니다.
             for (var dx = -1; dx <= 1; dx++)
             {
                 for (var dy = -1; dy <= 1; dy++)

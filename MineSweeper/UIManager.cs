@@ -19,18 +19,17 @@ public class UIManager : IDrawable
         for (var i = 0; i < board.MapY; i++)
         {
             DrawBoardSideUi(i + 1);
-
+            
             for (var j = 0; j < board.MapX; j++)
             {
                 var tile = board.GetTile(j, i);
                 DrawEachTile(tile, onCheat);
             }
-
+            
             Console.WriteLine();
         }
         
         Console.WriteLine();
-
         DrawBottomUi();
     }
 
@@ -57,7 +56,7 @@ public class UIManager : IDrawable
     /// <param name="board">보드 객체</param>
     private void DrawBoardTopUi(Board board)
     {
-        Console.Write(" Y\\X ");
+        Console.Write(" Y/X ");
         for (var j = 1; j <= board.MapX; j++)
         {
             Console.Write(j < 10 ? $"  {j}. " : $" {j}. ");
@@ -110,7 +109,7 @@ public class UIManager : IDrawable
     /// </summary>
     private void DrawBottomUi()
     {
-        Console.WriteLine("# 실행할 명령과 좌표를 입력해주세요. (F - 타일 뒤집기 | R - 깃발 세우기)");
+        Console.WriteLine("# 실행할 명령과 좌표를 입력해주세요. (F - 타일 뒤집기 | R - 깃발 설치 및 제거)");
         Console.WriteLine("ex) F 3 5 ");
         Console.Write("> ");
     }

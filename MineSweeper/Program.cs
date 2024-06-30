@@ -19,7 +19,7 @@ public static class Program
 
             gameManager.Start(); // 게임 시작
 
-        } while (InputNewGame());
+        } while (NewGame());
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public static class Program
     /// 사용자로부터 새 게임을 진행할지 여부를 입력받습니다.
     /// </summary>
     /// <returns>새 게임 진행 여부</returns>
-    private static bool InputNewGame()
+    private static bool NewGame()
     {
         Console.WriteLine("# 새 게임을 진행하시겠습니까? Yes / No");
         Console.Write("> ");

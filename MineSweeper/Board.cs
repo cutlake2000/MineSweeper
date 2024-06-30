@@ -110,10 +110,12 @@ public class Board
 
             if (tile.NearbyMineCount == 0)
             {
+                // 주어진 좌표의 타일 인근에 지뢰가 없는 경우, 인접한 모든 타일들을 탐색합니다.
                 foreach (var nearby in TraverseNearbyTiles(posX, posY))
                 {
                     var nearbyTile = GetTile(nearby.Item1, nearby.Item2);
 
+                    // 인접한 각각의 타일들 중 열린 상태가 아닌 타일만 큐에 삽입합니다.
                     if (nearbyTile.CurrentTileState != TileState.Open)
                     {
                         queue.Enqueue(new Tuple<int, int>(nearby.Item1, nearby.Item2));
