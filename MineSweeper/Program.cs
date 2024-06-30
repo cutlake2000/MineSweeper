@@ -7,17 +7,21 @@ public static class Program
 {
     public static void Main()
     {
-        // 사용자로부터 초기 설정값을 입력 받습니다.
-        InputInitialSetting(out var mapX, out var mapY, out var entireMineCount);
+        do
+        {
+            // 사용자로부터 초기 설정값을 입력 받습니다.
+            InputInitialSetting(out var mapX, out var mapY, out var entireMineCount);
 
-        var mineSpawner = new MineSpawner(mapX, mapY, entireMineCount); // MineSpawner 초기화
-        var board = new Board(mapX, mapY, mineSpawner); // Board 초기화
-        var uiManager = new UIManager(); // UIController 초기화
-        var gameManager = new GameManager(board, uiManager); // GameManager 초기화
+            var mineSpawner = new MineSpawner(mapX, mapY, entireMineCount); // MineSpawner 초기화
+            var board = new Board(mapX, mapY, mineSpawner); // Board 초기화
+            var uiManager = new UIManager(); // UIController 초기화
+            var gameManager = new GameManager(board, uiManager); // GameManager 초기화
 
-        gameManager.Start(); // 게임 시작
+            gameManager.Start(); // 게임 시작
+
+        } while (InputNewGame());
     }
-    
+
     /// <summary>
     /// 사용자로부터 보드판의 크기와 지뢰 수를 입력받습니다.
     /// </summary>
@@ -34,5 +38,24 @@ public static class Program
         mapY = int.Parse(Console.ReadLine() ?? string.Empty);
         Console.Write("# 전체 지뢰 수를 입력하세요 : ");
         entireMineCount = int.Parse(Console.ReadLine() ?? string.Empty);
+    }
+    
+    /// <summary>
+    /// 사용자로부터 새 게임을 진행할지 여부를 입력받습니다.
+    /// </summary>
+    /// <returns>새 게임 진행 여부</returns>
+    private static bool InputNewGame()
+    {
+        Console.WriteLine("# 새 게임을 진행하시겠습니까? Yes / No");
+        Console.Write("> ");
+        
+        var command = Console.ReadLine();
+
+        return command switch
+        {
+            "Yes" => true,
+            "No" => false,
+            _ => false
+        };
     }
 }
