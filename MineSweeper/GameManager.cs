@@ -52,34 +52,7 @@ public class GameManager(Board board, IDrawable uiManager)
 
         uiManager.DrawResult(progress);
     }
-
-    /// <summary>
-    /// 사용자로부터 입력을 받아 로직을 처리합니다.
-    /// </summary>
-    private void InputCommand()
-    {
-        var input = Console.ReadLine();
-        var command = input?.Split(" ");
-
-        switch (command?[0])
-        {
-            case "F":
-                if (_onCheat) _onCheat = false;
-                if (board.FlipTile(int.Parse(command[1]) - 1, int.Parse(command[2]) - 1)) _score = -1;
-                break;
-            case "R":
-                if (_onCheat) _onCheat = false;
-                _score += board.RaiseFlagOnTile(int.Parse(command[1]) - 1, int.Parse(command[2]) - 1);
-                break;
-            case "ShowMine":
-                if (!_onCheat) _onCheat = true;
-                break;
-            case "HideMine":
-                if (_onCheat) _onCheat = false;
-                break;
-        }
-    }
-
+    
     /// <summary>
     /// 게임의 현재 상태를 업데이트합니다.
     /// </summary>
@@ -88,5 +61,64 @@ public class GameManager(Board board, IDrawable uiManager)
     {
         if (_score == -1) return Progress.GameOver;
         return _score >= board.EntireMineCounts ? Progress.Victory : Progress.OnProgress;
+    }
+
+    /// <summary>
+    /// 사용자로부터 입력을 받아 유효성을 검사하고, 이후 로직을 처리합니다.
+    /// </summary>
+    private void InputCommand()
+    {
+        bool isValid;
+        do
+        {
+            isValid = true;
+            
+            var input = Console.ReadLine();
+            var command = input?.Split(" ");
+
+            if (command == null || command.Length == 0)
+            {
+                isValid = false;
+            }
+            else
+            {
+                switch (command[0])
+                {
+                    case "F":
+                        if (command.Length < 3 || !int.TryParse(command[1], out var flipX) || !int.TryParse(command[2], out var flipY))
+                        {
+                            isValid = false;
+                        }
+                        else
+                        {
+                            if (_onCheat) _onCheat = false;
+                            if (board.FlipTile(flipX - 1, flipY - 1)) _score = -1;
+                        }
+                        break;
+                    case "R":
+                        if (command.Length < 3 || !int.TryParse(command[1], out var flagX) || !int.TryParse(command[2], out var flagY))
+                        {
+                            isValid = false;
+                        }
+                        else
+                        {
+                            if (_onCheat) _onCheat = false;
+                            _score += board.RaiseFlagOnTile(flagX - 1, flagY - 1);
+                        }
+                        break;
+                    case "ShowMine":
+                        if (!_onCheat) _onCheat = true;
+                        break;
+                    case "HideMine":
+                        if (_onCheat) _onCheat = false;
+                        break;
+                    default:
+                        isValid = false;
+                        break;
+                }
+            }
+
+            if (!isValid) uiManager.DrawCommandError(); // 유효하지 않은 입력을 받았다면 에러 메시지 출력
+        } while (!isValid);
     }
 } 

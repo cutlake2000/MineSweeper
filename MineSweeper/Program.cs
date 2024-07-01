@@ -7,8 +7,11 @@ namespace MineSweeper.MineSweeper;
 /// </summary>
 public static class Program
 {
+    private static readonly UIManager UiManager = new();
+    
     public static void Main()
     {
+        
         do
         {
             // 사용자로부터 초기 설정값을 입력 받습니다.
@@ -16,8 +19,7 @@ public static class Program
 
             var mineSpawner = new MineSpawner(mapX, mapY, entireMineCount); // MineSpawner 초기화
             var board = new Board(mapX, mapY, mineSpawner); // Board 초기화
-            var uiManager = new UIManager(); // UIController 초기화
-            var gameManager = new GameManager(board, uiManager); // GameManager 초기화
+            var gameManager = new GameManager(board, UiManager); // GameManager 초기화
 
             gameManager.Start(); // 게임 시작
 
@@ -57,7 +59,8 @@ public static class Program
             isValid = int.TryParse(input, out output) && output > 0;
 
             if (isValid) continue;
-            Console.WriteLine("!! 올바른 정수 값을 입력해주세요 !!");
+            
+            UiManager.DrawWrongValue();
         } while (!isValid); // 정수로 파싱이 가능하고, 0보다 큰 경우에만 루프를 종료합니다.
 
         return output;
@@ -82,7 +85,8 @@ public static class Program
             isValid = int.TryParse(input, out output) && min < output && output < max;
             
             if (isValid) continue;
-            Console.WriteLine($"올바른 범위 내 정수를 입력해주세요. (범위: {min} - {max})");
+
+            UiManager.DrawOutOfRangeValue(min, max);
         } while (!isValid);  // 정수로 파싱이 가능하고, min 이상 max 이하의 경우에만 루프를 종료합니다.
 
         return output;
@@ -94,8 +98,7 @@ public static class Program
     /// <returns>새 게임 진행 여부</returns>
     private static bool RestartGame()
     {
-        Console.WriteLine("# 새 게임을 진행하시겠습니까? Yes / No");
-        Console.Write("> ");
+        UiManager.DrawNewGame();
         
         var command = Console.ReadLine();
 
